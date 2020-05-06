@@ -1,10 +1,10 @@
 /**
  *
- *  @author Gut Paweł S18923
+ *  @author Partyka Jakub S18830
  *
  */
 
-package PASSTIME1;
+package S_PASSTIME_SERVER1;
 
 
 import java.util.*;

@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.naming.*;
 import javax.jms.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Chat extends SwingWorker {
     private JPanel chatPanel;
@@ -23,6 +25,17 @@ public class Chat extends SwingWorker {
         Topic topic = (Topic) ctx.lookup(admTopicName);
         Connection con = factory.createConnection();
 
+        message.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+
+                if(e.getExtendedKeyCode() == 10)
+                    sendButton.doClick();
+                    message.setText("");
+            }
+        });
+
         //add action listener to send button
         sendButton.addActionListener(e -> {
             Session ses;
@@ -34,11 +47,7 @@ public class Chat extends SwingWorker {
 
                 String messageToSend = message.getText();
 
-                if(messageToSend.equalsIgnoreCase("exit")){
-                    con.close();
-                    System.exit(0);
-                }
-                else{
+                if(!messageToSend.equals("") && !messageToSend.equals(" ")){
                     TextMessage msg = ses.createTextMessage();
                     msg.setText("["+username+"]: "+messageToSend);
                     producer.send(msg);
@@ -47,12 +56,11 @@ public class Chat extends SwingWorker {
             } catch (JMSException | NamingException e1) {
                 e1.printStackTrace();
             }
-
         });
 
         //receive message from chat
         try {
-            Session ses = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Session ses = con.createSession(false, Session.SESSION_TRANSACTED);
             TopicSubscriber subs = ses.createDurableSubscriber(topic, subscriptionName);
 
             con.start();
@@ -71,7 +79,6 @@ public class Chat extends SwingWorker {
         catch (Exception e){
             e.printStackTrace();
         }
-
         return null;
     }
 

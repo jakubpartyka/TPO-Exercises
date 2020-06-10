@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class Login {
@@ -10,17 +11,55 @@ public class Login {
     private JButton registerButton;
     private JButton quitButton;
     private JLabel status;
+    private JLabel header;
 
     Login() {
+        showLogin();
+    }
+
+    private void register() {
+        status.setText("");
+        registerButton.setVisible(false);
+
+        header.setText("Register to JMS Chat");
+        logInButton.setText("Create Account");
+
+        for (ActionListener actionListener : logInButton.getActionListeners()) {
+            logInButton.removeActionListener(actionListener);
+        }
+        logInButton.addActionListener(e -> {
+            String username = loginTextField.getText();
+            char [] pass = passwordPasswordField.getPassword();
+            if(Main.passwords.containsKey(username))
+                status.setText("username taken!");
+            else {
+                Main.addUser(username, pass);
+                //back to normal
+                status.setText("");
+                logInButton.setText("Log In");
+                registerButton.setVisible(true);
+                header.setText("Log in to JMS chat");
+                showLogin();
+            }
+        });
+
+    }
+
+    private void showLogin(){
+        for (ActionListener actionListener : logInButton.getActionListeners()) {
+            logInButton.removeActionListener(actionListener);
+        }
+
         logInButton.addActionListener(e -> {
             if(verifyLogin()){}
-                //todo
+            //todo
             else {
                 status.setForeground(Color.RED);
                 status.setText("INCORRECT USERNAME / PASSWORD -> TRY AGAIN");
             }
         });
         quitButton.addActionListener(e -> System.exit(0));
+        registerButton.addActionListener(e -> {register();});
     }
 
     private boolean verifyLogin() {

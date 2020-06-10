@@ -10,6 +10,9 @@ public class Main {
     private static JFrame frame;
     private static JPanel loginPanel;
     private static JPanel chatPanel;
+    private static Chat chat;
+    private static JTextArea chatField;
+    private static Login login;
 
     private Main(){
         readUsers();
@@ -23,8 +26,8 @@ public class Main {
 
     private static void initFrame(){
         //create views
-        Login login = new Login();
-        Chat chat = new Chat();
+        login = new Login();
+        chat = new Chat();
         chatPanel = chat.getChatPanel();
         frame = new JFrame("Login window");
         loginPanel = login.getLoginPanel();
@@ -90,5 +93,17 @@ public class Main {
         loginPanel.setVisible(false);
         frame.add(chatPanel);
         frame.setTitle("JMS CHAT");
+        chatField = chat.getChat();
+
+        //start executor
+        chat.setUsername(login.getUsername());
+        chat.execute();
+        chat.addPropertyChangeListener(evt -> {
+            if(evt.getPropertyName().equals("msg")){
+                chatField.append(evt.getNewValue().toString() + "\n");
+            }
+        });
+
+
     }
 }

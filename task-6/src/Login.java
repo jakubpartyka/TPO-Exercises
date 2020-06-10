@@ -12,6 +12,7 @@ public class Login {
     private JButton quitButton;
     private JLabel status;
     private JLabel header;
+    private String username;
 
     Login() {
         showLogin();
@@ -63,7 +64,7 @@ public class Login {
     }
 
     private boolean verifyLogin() {
-        String username = loginTextField.getText();
+        username = loginTextField.getText();
         char [] password = passwordPasswordField.getPassword();
 
         char [] correct = Main.passwords.get(username);
@@ -75,4 +76,7 @@ public class Login {
         return loginPanel;
     }
 
+    public String getUsername() {
+        return username;
+    }
 }

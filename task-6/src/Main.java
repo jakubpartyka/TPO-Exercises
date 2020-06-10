@@ -1,7 +1,9 @@
 import javax.swing.*;
+import java.util.HashMap;
 
 public class Main {
     private static JFrame frame;
+    static HashMap <String,char[]> passwords = new HashMap<>();
     public static void main(String[] args) {
         //login
         initFrame();
@@ -9,7 +11,6 @@ public class Main {
 
     private static void initFrame(){
         Login login = new Login();
-
         frame = new JFrame("Login window");
         frame.add(login.getLoginPanel());
         frame.setSize(400,400);

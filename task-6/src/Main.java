@@ -4,19 +4,32 @@ import java.util.HashMap;
 
 public class Main {
     private static File users = new File("users.txt");
-    private static JFrame frame;
     static HashMap <String,char[]> passwords = new HashMap<>();
-    public static void main(String[] args) {
-        readUsers();
 
-        //login
-        initFrame();
+    //GUI
+    private static JFrame frame;
+    private static JPanel loginPanel;
+    private static JPanel chatPanel;
+
+    private Main(){
+        readUsers();
+        SwingUtilities.invokeLater(Main::initFrame);
+    }
+
+
+    public static void main(String[] args) {
+        new Main();
     }
 
     private static void initFrame(){
+        //create views
         Login login = new Login();
+        Chat chat = new Chat();
+        chatPanel = chat.getChatPanel();
         frame = new JFrame("Login window");
-        frame.add(login.getLoginPanel());
+        loginPanel = login.getLoginPanel();
+        frame.add(loginPanel);
+
         frame.setSize(400,400);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -73,4 +86,9 @@ public class Main {
     }
 
 
+    static void logIn() {
+        loginPanel.setVisible(false);
+        frame.add(chatPanel);
+        frame.setTitle("JMS CHAT");
+    }
 }

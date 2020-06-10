@@ -51,8 +51,8 @@ public class Login {
         }
 
         logInButton.addActionListener(e -> {
-            if(verifyLogin()){}
-            //todo
+            if(verifyLogin())
+                Main.logIn();
             else {
                 status.setForeground(Color.RED);
                 status.setText("INCORRECT USERNAME / PASSWORD -> TRY AGAIN");
